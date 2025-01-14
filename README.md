@@ -257,11 +257,11 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | --------- | ----------- | -------|
 | `global.runAsNonRoot`| run puppetserver as non root |`false`|
 | `global.curl.image`| curl image |`curlimages/curl`|
-| `global.curl.tag`| curl image tag |`7.87.0`|
+| `global.curl.tag`| curl image tag |`8.11.1`|
 | `global.curl.imagePullPolicy`| curl image pull policy |`IfNotPresent`|
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | [] |
 | `global.pgchecker.image`| pgchecker image |`docker.io/busybox`|
-| `global.pgchecker.tag`| pgchecker image tag |`1.36`|
+| `global.pgchecker.tag`| pgchecker image tag |`1.37`|
 | `global.pgchecker.imagePullPolicy`| pgchecker image pull policy |`IfNotPresent`|
 | `global.puppetdbexporter.image`| puppetdb exporter image |`camptocamp/prometheus-puppetdb-exporter`|
 | `global.puppetdbexporter.tag`| puppetdb exporter image tag |`1.1.0`|
@@ -276,8 +276,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `global.extraEnv.*`| add extra environment variables to all containers |``|
 | `global.extraEnvSecret`| add extra environment variables to all containers from pre-existing secret |``|
 | `puppetserver.name` | puppetserver component label | `puppetserver`|
-| `puppetserver.image` | puppetserver image | `voxpupuli/container-puppetserver`|
-| `puppetserver.tag` | puppetserver img tag | `7.17.0-v1.5.0`|
+| `puppetserver.image` | puppetserver image | `ghcr.io/voxpupuli/puppetserver`|
+| `puppetserver.tag` | puppetserver img tag | `7.17.3-main`|
 | `puppetserver.pullPolicy` | puppetserver img pull policy | `IfNotPresent`|
 | `puppetserver.persistence.data.enabled`| Persists /opt/puppetlabs/server/data/puppetserver/ in a PVC |`true`|
 | `puppetserver.persistence.data.existingClaim`| If non-empty, use a pre-defined PVC for puppet data |``|
@@ -360,7 +360,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.backup.successfulJobsHistoryLimit` | puppetserver restic backup CronJob successfulJobsHistoryLimit | `2`|
 | `puppetserver.masters.backup.schedule` | puppetserver restic backup CronJob schedule | `@every 12h`|
 | `puppetserver.masters.backup.image` | puppetserver restic backup CronJob image | `restic/restic`|
-| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
+| `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.17.3`|
 | `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
 | `puppetserver.masters.backup.caConfigMap` | puppetserver restic backup CronJob configmap for custom ca-certificates.crt | ``|
 | `puppetserver.masters.backup.serviceAccount.enabled` | puppetserver backup serviceaccount enabled, useful for setting up AKS workload identity, will not be created unless creat also true | `false`|
@@ -483,8 +483,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.networkPolicy.enabled` | enable `networkPolicy` on  postgresql | `true`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
-| `puppetdb.image` | puppetdb img | `voxpupuli/container-puppetdb`|
-| `puppetdb.tag` | puppetdb img tag | `7.18.0-v1.5.0`|
+| `puppetdb.image` | puppetdb img | `voxpupuli/puppetdb`|
+| `puppetdb.tag` | puppetdb img tag | `7.20.0-main`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
 | `puppetdb.extraEnv` | puppetdb additional container env vars |``|
@@ -513,8 +513,8 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetdb.psp.create`| Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later |`false`|
 | `puppetboard.enabled` | puppetboard availability | `false`|
 | `puppetboard.name` | puppetboard component label | `puppetboard`|
-| `puppetboard.image` | puppetboard img | `xtigyro/puppetboard`|
-| `puppetboard.tag` | puppetboard img tag | `2.1.2`|
+| `puppetboard.image` | puppetboard img | `ghcr.io/voxpupuli/puppetboard`|
+| `puppetboard.tag` | puppetboard img tag | `6.0.0`|
 | `puppetboard.port` | puppetboard container port | `9090`|
 | `puppetboard.pullPolicy` | puppetboard img pull policy | `IfNotPresent`|
 | `puppetboard.resources` | puppetboard resource limits |``|

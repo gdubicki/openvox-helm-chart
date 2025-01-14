@@ -15,6 +15,7 @@ NOTE: The change log until version `v0.2.4` is auto-generated.
 - Fix: Update curl, busybox container versions for security patches
 - Fix: #210 Readme updates for Puppet 8 upgrade
 - Fix: Readme updates for Backup instructions
+- Fix: #240 Readme updates to match corrected versions and container image locations
 
 ## [v9.5.2](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.2) (2024-06-18)
 - Fix: #233 - Allow puppetdb.fqdns.alternateServerNames to be configured
