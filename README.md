@@ -171,11 +171,83 @@ horizontalpodautoscaler.autoscaling/puppetserver-compilers-autoscaler   Stateful
 
 ## Upgrading
 
-### from 7.x to 8.0
+### from Chart Version 7.x to 8.0
 
 `customPersistentVolumeClaim` was removed instead check `puppetdb.persistence.existingClaim` or `puppetserver.persistence.*.existingClaim` for similar functionnality.
 
 Added support for setting the size and Storage Class of individual Persistent Volume Claims fullfilling most uses of `customPersistentVolumeClaim` check `puppetdb.persistence.size` `puppetdb.persistence.storageClass`, `puppetserver.persistence.*.storageClass` and `puppetserver.persistence.*.size` for more information.
+
+### Puppet Version from 7.x to 8.x
+
+for upgrading to Puppet 8, you only need to set the relevant tags for puppetserver and puppetdb to an appropriate version tag e.g.
+
+```
+puppetserver:
+  tag: 8.7.0-latest
+puppetdb:
+  tag: 8.8.1-latest
+```
+no other additional configuration should be needed.
+
+It is important to make sure that you update both tags as different major versions of the product are not compatible with each other.
+
+## Backups
+
+This chart includes optional backup of CA certs using [Restic](https://restic.net/), the default configuration supports S3 or S3 compatible storage by setting a configuration similar to this:
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    access_key_id: "ACCESSKEYHERE"  # s3 access key
+    secret_access_key: "SECRETACCESSHERE"  # s3 secret access key
+    password: "ENCRYPTIONPASSWORDHERE"  # restic encryption password
+```
+
+Alternatively you can define `puppetserver.masters.backup.restic.repository` and `puppetserver.masters.backup.restic.existingSecret` to use a pre-configured (NOTE: this chart will not provision the secret if defined) e.g.:
+
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    existingSecret: restic-env
+```
+
+a compatible secret can be created e.g.
+
+```
+kubectl create secret generic restic-env --from-literal=AWS_ACCESS_KEY_ID='ACCESSKEYHERE' --from-literal=AWS_SECRET_ACCESS_KEY='SECRETACCESSHERE' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
+```
+
+and the configuration will be equivalent to the original config.
+
+The benefit of this approach is that any Compatible Restic environment variables can be configured via this method and you can in theory use any supported restic backend for backup. for example, Azure Blob storage can be used with the following config:
+
+```
+masters:
+  extraLabels:
+    azure.workload.identity/use: "true"   
+  backup:
+    enabled: true
+    serviceAccount:
+      enabled: true
+      create: true
+      annotations:
+        azure.workload.identity/client-id: <azure managed identity client id>
+    restic:
+      repository: "azure:<container-name>:/"
+      existingSecret: restic-env
+```
+
+with the following secret configuration 
+
+kubectl create secret generic restic-env --from-literal=AZURE_ACCOUNT_NAME='<azure storage account name>' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
+  
+Consult the Restic Documentation for more configuration/authentication options
+
 
 ## Configuration
 
@@ -291,8 +363,12 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.13.1`|
 | `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
 | `puppetserver.masters.backup.caConfigMap` | puppetserver restic backup CronJob configmap for custom ca-certificates.crt | ``|
+| `puppetserver.masters.backup.serviceAccount.enabled` | puppetserver backup serviceaccount enabled, useful for setting up AKS workload identity, will not be created unless creat also true | `false`|
+| `puppetserver.masters.backup.serviceAccount.create` | puppetserver backup serviceaccount create, useful for setting up AKS workload identity defaults to false | `false`|
+| `puppetserver.masters.backup.serviceAccount.annotations` | puppetserver backup service account annotations, e.g. to set client-id for AKS Workload Identity | ``|
 | `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
 | `puppetserver.masters.backup.restic.repository` | puppetserver restic backup CronJob s3 compatible repository | ``|
+| `puppetserver.masters.backup.restic.existingSecret` | puppetserver restic existingSecret - use this instead of declaring access_key_id and other restic secrets in the install values or to declare other Restic environment variables | ``|
 | `puppetserver.masters.backup.restic.access_key_id` | puppetserver restic backup CronJob s3 access_key_id | ``|
 | `puppetserver.masters.backup.restic.secret_access_key` | puppetserver restic backup CronJob s3 secret_access_key | ``|
 | `puppetserver.masters.backup.restic.password` | puppetserver restic backup CronJob encryption password  | ``|
@@ -526,7 +602,7 @@ It would be great to test all ressources to avoid regression in the future
 
 run test:
 ```
-helm unittest . -3
+helm unittest . -u
 ```
 
 ## Testing the Deployed Chart Resources
