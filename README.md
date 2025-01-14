@@ -101,6 +101,64 @@ You can enable it using:
 global.runAsNonRoot: true
 ```
 
+## Backups
+
+This chart includes optional backup of CA certs using [Restic](https://restic.net/), the default configuration supports S3 or S3 compatible storage by setting a configuration similar to this:
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    access_key_id: "ACCESSKEYHERE"  # s3 access key
+    secret_access_key: "SECRETACCESSHERE"  # s3 secret access key
+    password: "ENCRYPTIONPASSWORDHERE"  # restic encryption password
+```
+
+Alternatively you can define `puppetserver.masters.backup.restic.repository` and `puppetserver.masters.backup.restic.existingSecret` to use a pre-configured (NOTE: this chart will not provision the secret if defined) e.g.:
+
+
+```
+backup:
+  enabled: true
+  restic:
+    repository: "s3:https://s3.minio.xx/backups/"
+    existingSecret: restic-env
+```
+
+a compatible secret can be created e.g.
+
+```
+kubectl create secret generic restic-env --from-literal=AWS_ACCESS_KEY_ID='ACCESSKEYHERE' --from-literal=AWS_SECRET_ACCESS_KEY='SECRETACCESSHERE' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
+```
+
+and the configuration will be equivalent to the original config.
+
+The benefit of this approach is that any Compatible Restic environment variables can be configured via this method and you can in theory use any supported restic backend for backup. for example, Azure Blob storage can be used with the following config:
+
+```
+masters:
+  extraLabels:
+    azure.workload.identity/use: "true"   
+  backup:
+    enabled: true
+    serviceAccount:
+      enabled: true
+      create: true
+      annotations:
+        azure.workload.identity/client-id: <azure managed identity client id>
+    restic:
+      repository: "azure:<container-name>:/"
+      existingSecret: restic-env
+```
+
+with the following secret configuration 
+
+```
+kubectl create secret generic restic-env --from-literal=AZURE_ACCOUNT_NAME='<azure storage account name>' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
+```
+  
+Consult the [Restic Documentation](https://restic.readthedocs.io/en/stable/index.html) for more configuration/authentication options
 
 ## Chart Components
 
@@ -190,64 +248,6 @@ puppetdb:
 no other additional configuration should be needed.
 
 It is important to make sure that you update both tags as different major versions of the product are not compatible with each other.
-
-## Backups
-
-This chart includes optional backup of CA certs using [Restic](https://restic.net/), the default configuration supports S3 or S3 compatible storage by setting a configuration similar to this:
-
-```
-backup:
-  enabled: true
-  restic:
-    repository: "s3:https://s3.minio.xx/backups/"
-    access_key_id: "ACCESSKEYHERE"  # s3 access key
-    secret_access_key: "SECRETACCESSHERE"  # s3 secret access key
-    password: "ENCRYPTIONPASSWORDHERE"  # restic encryption password
-```
-
-Alternatively you can define `puppetserver.masters.backup.restic.repository` and `puppetserver.masters.backup.restic.existingSecret` to use a pre-configured (NOTE: this chart will not provision the secret if defined) e.g.:
-
-
-```
-backup:
-  enabled: true
-  restic:
-    repository: "s3:https://s3.minio.xx/backups/"
-    existingSecret: restic-env
-```
-
-a compatible secret can be created e.g.
-
-```
-kubectl create secret generic restic-env --from-literal=AWS_ACCESS_KEY_ID='ACCESSKEYHERE' --from-literal=AWS_SECRET_ACCESS_KEY='SECRETACCESSHERE' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
-```
-
-and the configuration will be equivalent to the original config.
-
-The benefit of this approach is that any Compatible Restic environment variables can be configured via this method and you can in theory use any supported restic backend for backup. for example, Azure Blob storage can be used with the following config:
-
-```
-masters:
-  extraLabels:
-    azure.workload.identity/use: "true"   
-  backup:
-    enabled: true
-    serviceAccount:
-      enabled: true
-      create: true
-      annotations:
-        azure.workload.identity/client-id: <azure managed identity client id>
-    restic:
-      repository: "azure:<container-name>:/"
-      existingSecret: restic-env
-```
-
-with the following secret configuration 
-
-kubectl create secret generic restic-env --from-literal=AZURE_ACCOUNT_NAME='<azure storage account name>' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
-  
-Consult the Restic Documentation for more configuration/authentication options
-
 
 ## Configuration
 
