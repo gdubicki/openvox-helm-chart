@@ -19,7 +19,7 @@ global:
     image: puppet/r10k
     tag: 3.15.2
     imagePullPolicy: IfNotPresent
-  
+
   pgchecker:
     image: docker.io/busybox
     tag: 1.37
@@ -372,8 +372,8 @@ puppetserver:
       ## Replace ca-certificates.crt with your own CA bundle if needed
       ##
       caConfigMap: ""
-      
-      #ServiceAccount configuration - needed of using AKS Workload Identity default off to not change default
+
+      ## ServiceAccount configuration - needed of using AKS Workload Identity default off to not change default
       serviceAccount:
         enabled: false
         create: false
@@ -384,7 +384,7 @@ puppetserver:
       restic:
         keep_last: 90  # days
         repository: ""  # "s3:https://s3.minio.xx/backups/"
-        existingSecret: "" # to use this instead of the below
+        existingSecret: ""  # to use this instead of the below
         access_key_id: ""  # s3 access key
         secret_access_key: ""  # s3 secret access key
         password: ""  # restic encryption password
