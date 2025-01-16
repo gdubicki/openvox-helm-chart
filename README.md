@@ -362,7 +362,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `puppetserver.masters.backup.tag` | puppetserver restic backup CronJob image tag | `0.17.3`|
 | `puppetserver.masters.backup.pullPolicy` | puppetserver restic backup CronJob image pullPolicy | `IfNotPresent`|
 | `puppetserver.masters.backup.caConfigMap` | puppetserver restic backup CronJob configmap for custom ca-certificates.crt | ``|
-| `puppetserver.masters.backup.serviceAccount.enabled` | puppetserver backup serviceaccount enabled, useful for setting up AKS workload identity, will not be created unless creat also true | `false`|
+| `puppetserver.masters.backup.serviceAccount.enabled` | puppetserver backup serviceaccount enabled, useful for setting up AKS workload identity, will not be created unless create also true | `false`|
 | `puppetserver.masters.backup.serviceAccount.create` | puppetserver backup serviceaccount create, useful for setting up AKS workload identity defaults to false | `false`|
 | `puppetserver.masters.backup.serviceAccount.annotations` | puppetserver backup service account annotations, e.g. to set client-id for AKS Workload Identity | ``|
 | `puppetserver.masters.backup.restic.keep_last` | puppetserver restic backup CronJob keep last n days | `90`|
