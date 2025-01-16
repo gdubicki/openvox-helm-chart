@@ -482,7 +482,7 @@ The following table lists the configurable parameters of the Puppetserver chart 
 | `postgresql.networkPolicy.enabled` | enable `networkPolicy` on  postgresql | `true`|
 | `puppetdb.enabled` | puppetdb component enabled |`true`|
 | `puppetdb.name` | puppetdb component label | `puppetdb`|
-| `puppetdb.image` | puppetdb img | `voxpupuli/puppetdb`|
+| `puppetdb.image` | puppetdb img | `ghcr.io/voxpupuli/puppetdb`|
 | `puppetdb.tag` | puppetdb img tag | `7.20.0-main`|
 | `puppetdb.pullPolicy` | puppetdb img pull policy | `IfNotPresent`|
 | `puppetdb.resources` | puppetdb resource limits |``|
