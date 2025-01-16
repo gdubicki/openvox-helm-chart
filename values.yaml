@@ -377,7 +377,7 @@ puppetserver:
       serviceAccount:
         enabled: false
         create: false
-        annotations:
+        annotations: {}
 
       ## Restric configuration
       ##
