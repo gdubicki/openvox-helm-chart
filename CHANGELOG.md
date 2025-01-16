@@ -5,7 +5,7 @@ numbering uses [semantic versioning](http://semver.org).
 
 NOTE: The change log until version `v0.2.4` is auto-generated.
 
-## [v9.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.2) (2024-06-18)
+## [v9.6.0](https://github.com/puppetlabs/puppetserver-helm-chart/tree/v9.5.2) (2025-01-14)
 - Feat: #191 enable use of secret for restic environment variables
 - Feat: enable use of Azure Blob Storage including AKS Workload Identity for Restic Backups
 - Fix: Update Restic Container to v0.17.3
