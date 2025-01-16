@@ -117,7 +117,6 @@ backup:
 
 Alternatively you can define `puppetserver.masters.backup.restic.repository` and `puppetserver.masters.backup.restic.existingSecret` to use a pre-configured (NOTE: this chart will not provision the secret if defined) e.g.:
 
-
 ```
 backup:
   enabled: true
