@@ -125,13 +125,7 @@ backup:
     existingSecret: restic-env
 ```
 
-a compatible secret can be created e.g.
-
-```
-kubectl create secret generic restic-env --from-literal=AWS_ACCESS_KEY_ID='ACCESSKEYHERE' --from-literal=AWS_SECRET_ACCESS_KEY='SECRETACCESSHERE' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
-```
-
-and the configuration will be equivalent to the original config.
+The secret needs to contain `KEY=VALUE` pairs that match up with the supported Restic environment variable names. Consult the [Restic Documentation](https://restic.readthedocs.io/en/stable/index.html) for more detail on the various configuration/authentication options.
 
 The benefit of this approach is that any Compatible Restic environment variables can be configured via this method and you can in theory use any supported restic backend for backup. for example, Azure Blob storage can be used with the following config:
 
@@ -150,14 +144,6 @@ masters:
       repository: "azure:<container-name>:/"
       existingSecret: restic-env
 ```
-
-with the following secret configuration 
-
-```
-kubectl create secret generic restic-env --from-literal=AZURE_ACCOUNT_NAME='<azure storage account name>' --from-literal=RESTIC_PASSWORD='ENCRYPTIONPASSWORDHERE'
-```
-  
-Consult the [Restic Documentation](https://restic.readthedocs.io/en/stable/index.html) for more configuration/authentication options
 
 ## Chart Components
 
