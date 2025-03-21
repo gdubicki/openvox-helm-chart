@@ -35,11 +35,11 @@ manifest should match snapshot:
         spec:
           containers:
             - env:
-                - name: PUPPET_MASTERPORT
+                - name: OPENVOXSERVER_PORT
                   value: "8140"
                 - name: DNS_ALT_NAMES
                   value: puppet,puppetserver-agents-to-puppet,puppetserver-puppet,,puppetserver-puppet-compilers,
-                - name: PUPPETDB_SERVER_URLS
+                - name: OPENVOXDB_SERVER_URLS
                   value: https://puppetserver-puppetdb:8081
                 - name: CA_ENABLED
                   value: "false"
@@ -47,7 +47,7 @@ manifest should match snapshot:
                   value: "true"
                 - name: CA_HOSTNAME
                   value: puppetserver-puppet
-                - name: CA_MASTERPORT
+                - name: CA_PORT
                   value: "8140"
               envFrom: null
               image: ghcr.io/openvoxproject/openvoxserver:8.8.0-main
