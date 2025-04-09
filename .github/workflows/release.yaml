@@ -61,29 +61,29 @@ jobs:
       - name: Package the chart
         run: helm package . --destination .release-packages --dependency-update
 
-      - name: Prep release notes
-        run: |
-          release_notes=`sed -n '/^## \['v${{ env.VERSION }}'\]/,/^## /p' CHANGELOG.md | sed -n '/^- /p'`
-          echo "RELEASE NOTES: $release_notes"
-          echo "$release_notes" > body.md
-          release_name=`echo "$release_notes"| head -1 | sed 's/^- //'`
-          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+      # - name: Prep release notes
+      #   run: |
+      #     release_notes=`sed -n '/^## \['v${{ env.VERSION }}'\]/,/^## /p' CHANGELOG.md | sed -n '/^- /p'`
+      #     echo "RELEASE NOTES: $release_notes"
+      #     echo "$release_notes" > body.md
+      #     release_name=`echo "$release_notes"| head -1 | sed 's/^- //'`
+      #     echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
 
-      - name: Make the release
-        id: create_release
-        uses: actions/create-release@v1
-        with:
-          tag_name: v${{ env.VERSION }}
-          release_name: ${{ env.RELEASE_NAME }}
-          body_path: body.md
+      # - name: Make the release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   with:
+      #     tag_name: v${{ env.VERSION }}
+      #     release_name: ${{ env.RELEASE_NAME }}
+      #     body_path: body.md
 
-      - name: upload artifacts to the release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./.release-packages/puppetserver-${{ env.VERSION }}.tgz
-          asset_name: puppetserver-${{ env.VERSION }}.tgz
-          asset_content_type: application/gzip
+      # - name: upload artifacts to the release
+      #   uses: actions/upload-release-asset@v1
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: ./.release-packages/puppetserver-${{ env.VERSION }}.tgz
+      #     asset_name: puppetserver-${{ env.VERSION }}.tgz
+      #     asset_content_type: application/gzip
 
       - name: update ghpages
         run: |
