@@ -174,7 +174,7 @@ spec:
             {{- toYaml .Values.puppetboard.resources | nindent 12 }}
           env:
             - name: PUPPETDB_HOST
-              value: {{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}
+              value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_HOST") ""}}{{ get .Values.puppetboard.extraEnv "PUPPETDB_HOST" }}{{ else }}{{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}{{ end }}
             - name: PUPPETDB_PORT
               value: "8081"
             - name: PUPPETDB_SSL_VERIFY
