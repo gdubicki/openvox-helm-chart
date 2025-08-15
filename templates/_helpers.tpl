@@ -731,14 +731,13 @@ Define puppetdb service Account name
 Return PostgreSQL host name
 */}}
 {{- define "postgresql.hostname" -}}
-{{- if .Values.postgresql.enabled }}
+{{- if .Values.puppetdb.extraEnv.OPENVOXDB_POSTGRES_HOSTNAME }}
+{{- printf "%s" .Values.puppetdb.extraEnv.OPENVOXDB_POSTGRES_HOSTNAME -}}
+{{- else -}}
 {{- if eq .Values.postgresql.architecture "standalone" -}}
 {{- printf "%s-%s" .Release.Name "postgresql-hl" | trimSuffix "-" -}}
 {{- else }}
 {{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
-{{- end -}}
-{{- else if .Values.puppetdb.extraEnv.OPENVOXDB_POSTGRES_HOSTNAME }}
-{{- printf "%s" .Values.puppetdb.extraEnv.OPENVOXDB_POSTGRES_HOSTNAME -}}
 {{- end -}}
 {{- end -}}
 
