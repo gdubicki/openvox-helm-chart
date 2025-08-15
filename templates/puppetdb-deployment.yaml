@@ -179,10 +179,12 @@ spec:
               value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_PORT") ""}}"{{ get .Values.puppetboard.extraEnv "PUPPETDB_PORT" }}"{{ else }}"8081"{{ end }}
             - name: PUPPETDB_SSL_VERIFY
               value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_SSL_VERIFY") ""}}"{{ get .Values.puppetboard.extraEnv "PUPPETDB_SSL_VERIFY" }}"{{ else }}"/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"{{ end }}
+            {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_SSL_VERIFY") "false" }}
             - name: PUPPETDB_CERT
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/openvoxdb.pem"
             - name: PUPPETDB_KEY
               value: "/opt/puppetlabs/server/data/puppetdb/certs/private_keys/openvoxdb.pem"
+            {{ end }}
             - name: PUPPETBOARD_PORT
               value: {{ .Values.puppetboard.port | quote }}
             - name: SECRET_KEY
@@ -195,8 +197,10 @@ spec:
               value: "{{ $value }}"
             {{- end }}
             {{- range $key, $value := .Values.puppetboard.extraEnv }}
+            {{ if not (has $key (list "PUPPETDB_HOST" "PUPPETDB_PORT" "PUPPETDB_SSL_VERIFY")) }}
             - name: {{ $key }}
               value: "{{ $value }}"
+            {{ end }}
             {{- end }}
           envFrom:
           {{- if .Values.global.extraEnvSecret }}
