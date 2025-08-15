@@ -740,6 +740,7 @@ Return PostgreSQL host name
 {{- printf "%s-%s" .Release.Name "postgresql-primary-hl" | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
+{{- end -}}
 
 {{/*
 Return puppetserver certificate name without extension
