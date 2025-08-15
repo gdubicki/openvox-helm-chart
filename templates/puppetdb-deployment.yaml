@@ -176,9 +176,9 @@ spec:
             - name: PUPPETDB_HOST
               value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_HOST") ""}}{{ get .Values.puppetboard.extraEnv "PUPPETDB_HOST" }}{{ else }}{{ if .Values.singleCA.enabled}}{{.Values.singleCA.puppetdb.overrideHostname}}{{ else }}{{ ( include "puppetdb.fullname" . ) }}{{ end }}{{ end }}
             - name: PUPPETDB_PORT
-              value: "8081"
+              value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_PORT") ""}}"{{ get .Values.puppetboard.extraEnv "PUPPETDB_PORT" }}"{{ else }}"8081"{{ end }}
             - name: PUPPETDB_SSL_VERIFY
-              value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"
+              value: {{ if ne (get .Values.puppetboard.extraEnv "PUPPETDB_SSL_VERIFY") ""}}"{{ get .Values.puppetboard.extraEnv "PUPPETDB_SSL_VERIFY" }}"{{ else }}"/opt/puppetlabs/server/data/puppetdb/certs/certs/ca.pem"{{ end }}
             - name: PUPPETDB_CERT
               value: "/opt/puppetlabs/server/data/puppetdb/certs/certs/openvoxdb.pem"
             - name: PUPPETDB_KEY
